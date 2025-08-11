@@ -1,69 +1,152 @@
-# 🌡 Generic Temperature Converter
+# 📦🚀 Steps to Build and Publish a Python Package to PyPI
 
-A lightweight Python package to convert temperatures between **Celsius**, **Fahrenheit**, and **Kelvin**.  
-It works both as a **command-line tool** and as an **importable Python module**.
+This guide shows how to structure, build, and upload a Python package to PyPI using **pyproject.toml**, `setuptools`, and `twine`.
+
+***
+
+## 🛠️ 1. Prerequisites
+
+Before you start, ensure you have:
+
+- **A PyPI account** *(register at pypi.org)*
+- **A PyPI API access token** with “Upload” scope  
+  - Create it at: Account Settings → API Tokens
+  - Copy and store securely (used for `.pypirc` or directly in commands)
+- **Python 3.7+** installed
+- **Required tools**:
+  - `setuptools`, `build`, `twine`  
+  *(Install later in step 2)*
+
+***
+
+## 📂 2. Project Structure Example
+
+```
+
+root_dir/
+│
+├── src/
+│   └── project_dir/
+│       ├── __init__.py
+│       └── main.py
+│
+├── LICENSE
+├── README.md
+├── pyproject.toml
+
+```
+
+***
+
+## 📝 3. Example `pyproject.toml`
+
+```toml
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project_name"
+version = "0.1.0"
+description = "Project Description which will appear on PyPI."
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/your-repo"
+Repository = "https://github.com/yourusername/your-repo"
+"Bug Tracker" = "https://github.com/yourusername/your-repo/issues"
+```
 
 
-## 📦 Installation
+***
 
-pip install generic-temperature-converter
+## 🔧 4. Install Required Tools
 
-
-
-## 💻 Command-Line Usage
-
-Once installed, you can run:
-
-tempconv <value> <from_unit> <to_unit>
+```bash
+pip install --upgrade setuptools build twine
+```
 
 
-**Example:**
+***
 
-tempconv 100 C F
+## 🔐 5. Optional but recommended: Configure `.pypirc` for Twine
 
+Create a `.pypirc` file in your home directory for easier authentication.
 
-**Output:**
+**Linux / macOS:**
 
-100.00°C = 212.00°F
+```bash
+nano ~/.pypirc
+```
 
+**Windows (PowerShell):**
 
+```powershell
+notepad $env:USERPROFILE\.pypirc
+```
 
-## 📋 Supported Units
+**Add:**
 
-| Symbol | Unit Name   |
-|--------|------------|
-| `C`    | Celsius    |
-| `F`    | Fahrenheit |
-| `K`    | Kelvin     |
-
-
-
-
-## 🐍 Python Module Usage
-
-from generic_temperature_converter.converter import (
-celsius_to_fahrenheit,
-fahrenheit_to_celsius,
-celsius_to_kelvin,
-kelvin_to_celsius
-)
-
-print(celsius_to_fahrenheit(25)) # 77.0
-print(fahrenheit_to_celsius(212)) # 100.0
-print(celsius_to_kelvin(0)) # 273.15
-print(kelvin_to_celsius(300)) # 26.85
+```
+[pypi]
+  username = __token__
+  password = <your_api_token>
+```
 
 
+***
+
+## 🏗️ 6. Build the Package
+
+**Clean old builds:**
+
+```bash
+rm -rf dist build *.egg-info
+```
+
+**Build the new package:**
+
+```bash
+python3 -m build
+```
+
+This creates `.whl` and `.tar.gz` files in the `dist/` folder.
+
+***
+
+## 📤 7. Upload to PyPI
+
+**You cannot re-upload the same version number. For changes, bump the version in `pyproject.toml` before rebuilding.**
+
+**To upload:**
+
+```bash
+twine upload dist/*
+```
 
 
-## ✨ Features
+***
 
-- Supports **Celsius ↔ Fahrenheit**, **Celsius ↔ Kelvin**, and **Fahrenheit ↔ Kelvin** conversions.
-- Works from both **CLI** and **Python scripts**.
-- Handles floating-point rounding for clean output.
+## 🔍 8. Verify on PyPI
+
+Check your project at:
+
+```
+https://pypi.org/project/project_name/
+```
 
 
+***
 
-## 📄 License
+## ⬇️ 9. Install the Published Package
 
-This project is licensed under the **MIT License**.
+Others (or you) can install it using:
+
+```bash
+pip install project_name
+```
